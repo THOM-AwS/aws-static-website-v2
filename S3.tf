@@ -98,7 +98,7 @@ resource "aws_s3_bucket" "log_bucket" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "logging" {
-  bucket = aws_s3_bucket.log_bucket.id
+  bucket = aws_s3_bucket.log_bucket[0].id
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
