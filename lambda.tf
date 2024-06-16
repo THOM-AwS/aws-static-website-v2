@@ -1,17 +1,17 @@
 resource "aws_lambda_function" "cloudfront_lambda" {
-  filename         = var.lambda_zip_path
+  filename         = "secheaders.zip"
   function_name    = "website_security_headers_${local.name_prefix}"
   role             = aws_iam_role.lambda_edge.arn
   handler          = "secheaders.lambda_handler"
   runtime          = "python3.8"
   publish          = true
-  source_code_hash = filebase64sha256(var.lambda_zip_path)
+  source_code_hash = filebase64sha256("secheaders.zip")
   tags             = var.tags
 }
 
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir  = var.lambda_zip_path
+  source_dir  = "lambda_source_dir"
   output_path = "secheaders.zip"
 }
 
