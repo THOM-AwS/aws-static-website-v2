@@ -1,13 +1,7 @@
 resource "aws_cloudfront_distribution" "this" {
-  depends_on = [
-    aws_s3_bucket.thiswww,
-    aws_s3_bucket.log_bucket
-  ]
-
   origin {
-    domain_name = "www.${var.domain_name}.s3.amazonaws.com"
-    origin_id   = "www.${var.domain_name}-origin"
-
+    domain_name = aws_s3_bucket.thiswww.bucket_regional_domain_name
+    origin_id   = aws_s3_bucket.thiswww.bucket_regional_domain_name
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path
     }
