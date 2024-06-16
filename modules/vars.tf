@@ -18,3 +18,19 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "lambda_zip_path" {
+  description = "The path to the Lambda zip file"
+  type        = string
+}
+
+variable "cloudfront_distribution_hosted_zone_id" {
+  description = "The hosted zone ID of the CloudFront distribution"
+  type        = string
+}
+
+variable "create_logging_bucket" {
+  description = "Whether to create a logging bucket"
+  type        = bool
+  default     = false
+}
