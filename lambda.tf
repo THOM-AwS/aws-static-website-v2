@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "cloudfront_lambda" {
   filename         = var.lambda_zip_path
-  function_name    = "cloudfront_website_lambda_${var.domain_name}"
+  function_name    = "website_${var.domain_name}"
   role             = aws_iam_role.lambda_edge.arn
   handler          = "secheader.lambda_handler"
   runtime          = "python3.8"
