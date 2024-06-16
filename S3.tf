@@ -51,7 +51,7 @@ resource "aws_s3_bucket" "thiswww" {
 resource "aws_s3_bucket_logging" "thiswww" {
   count         = var.create_logging_bucket ? 1 : 0
   bucket        = aws_s3_bucket.thiswww.id
-  target_bucket = aws_s3_bucket.log_bucket.id
+  target_bucket = aws_s3_bucket.log_bucket[count.index].id
   target_prefix = "www"
 }
 
