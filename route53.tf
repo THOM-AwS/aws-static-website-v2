@@ -3,8 +3,13 @@ data "aws_route53_zone" "selected" {
   private_zone = false
 }
 
+data "aws_route53_record" "existing_record" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = var.domain_name
+}
+
 locals {
-  record_exists = length(data.aws_route53_record.selected.fqdns) > 0
+  record_exists = length(data.aws_route53_record.existing_record.fqdns) > 0
 }
 
 resource "aws_route53_record" "www" { # www subdomain bucket
