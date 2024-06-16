@@ -85,11 +85,11 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "logging" {
   }
 }
 
-# resource "aws_s3_bucket_acl" "logging" {
-#   count  = var.create_logging_bucket ? 1 : 0
-#   bucket = aws_s3_bucket.log_bucket[count.index].id
-#   acl    = "private"
-# }
+resource "aws_s3_bucket_acl" "logging" {
+  count  = var.create_logging_bucket ? 1 : 0
+  bucket = aws_s3_bucket.log_bucket[count.index].id
+  acl    = "log-delivery-write"
+}
 
 resource "aws_s3_bucket_policy" "s3_policy_logging" {
   count  = var.create_logging_bucket ? 1 : 0
@@ -102,7 +102,7 @@ resource "aws_s3_bucket_policy" "s3_policy_logging" {
         Sid : "AllowLogging",
         Effect : "Allow",
         Principal = {
-          AWS = "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${aws_cloudfront_origin_access_identity.origin_access_identity.id}"
+          AWS = aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn
         },
         Action   = "s3:PutObject",
         Resource = "arn:aws:s3:::${aws_s3_bucket.log_bucket[count.index].bucket}/*"
