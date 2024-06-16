@@ -15,7 +15,7 @@ output "function_arn" {
 
 output "zone_id" {
   description = "The ID of the Route 53 hosted zone"
-  value       = aws_route53_zone.selected.zone_id
+  value       = data.aws_route53_zone.selected.id
 }
 
 output "bucket_arn" {

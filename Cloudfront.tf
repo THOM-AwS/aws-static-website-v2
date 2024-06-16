@@ -1,6 +1,6 @@
 resource "aws_cloudfront_distribution" "this" {
   depends_on = [
-    aws_s3_bucket.this,
+    aws_s3_bucket.thiswww,
     aws_s3_bucket.log_bucket
   ]
 
@@ -9,7 +9,7 @@ resource "aws_cloudfront_distribution" "this" {
     origin_id   = "www.${var.domain_name}-origin"
 
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.this.cloudfront_access_identity_path
+      origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path
     }
   }
 
@@ -66,7 +66,7 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = data.aws_acm_certificate.acm_cert.arn
+    acm_certificate_arn      = data.aws_acm_certificate.this.arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }

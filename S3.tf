@@ -56,7 +56,7 @@ resource "aws_s3_bucket" "thiswww" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "thiswww" {
-  bucket = aws_s3_bucket.this.id
+  bucket = aws_s3_bucket.thiswww.id
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
@@ -65,19 +65,19 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "thiswww" {
 }
 
 resource "aws_s3_bucket_acl" "thiswww" {
-  bucket = aws_s3_bucket.this.id
+  bucket = aws_s3_bucket.thiswww.id
   acl    = "private"
 }
 
 resource "aws_s3_bucket_versioning" "thiswww" {
-  bucket = aws_s3_bucket.this.id
+  bucket = aws_s3_bucket.thiswww.id
   versioning_configuration {
     status = "Disabled"
   }
 }
 
 resource "aws_s3_bucket_public_access_block" "thiswww" {
-  bucket = aws_s3_bucket.this.id
+  bucket = aws_s3_bucket.thiswww.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -98,7 +98,7 @@ resource "aws_s3_bucket" "log_bucket" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "logging" {
-  bucket = aws_s3_bucket.this.id
+  bucket = aws_s3_bucket.log_bucket.id
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
@@ -107,6 +107,6 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "logging" {
 }
 
 resource "aws_s3_bucket_acl" "logging" {
-  bucket = aws_s3_bucket.log_bucket.id
+  bucket = aws_s3_bucket.log_bucket[0].id
   acl    = "private"
 }

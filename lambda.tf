@@ -58,7 +58,7 @@ resource "aws_iam_role_policy" "lambda_edge_policy" {
 
 resource "null_resource" "zip_lambda_sec" {
   triggers = {
-    lambda_hash = filemd5(secheaders.py)
+    lambda_hash = filemd5("./secheaders.py")
   }
   provisioner "local-exec" {
     command = <<EOT
