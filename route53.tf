@@ -3,13 +3,8 @@ data "aws_route53_zone" "selected" {
   private_zone = false
 }
 
-data "aws_route53_record" "existing_record" {
-  zone_id = data.aws_route53_zone.selected.zone_id
-  name    = var.domain_name
-}
-
 resource "aws_route53_record" "www" { # www subdomain bucket
-  zone_id = aws_route53_zone.selected.zone_id
+  zone_id = data.aws_route53_zone.selected.zone_id
   name    = "www.${var.domain_name}"
   type    = "A"
 

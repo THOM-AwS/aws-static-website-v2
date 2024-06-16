@@ -20,7 +20,7 @@ resource "aws_cloudfront_distribution" "this" {
 
   logging_config {
     include_cookies = true
-    bucket          = "${lower("${var.domain_name}-logging")}.s3.amazonaws.com"
+    bucket          = aws_s3_bucket.log_bucket[0].bucket_domain_name
     prefix          = "cloudfront-logs"
   }
 
