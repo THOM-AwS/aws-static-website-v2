@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "cloudfront_lambda" {
   filename         = var.lambda_zip_path
-  function_name    = "website_${var.domain_name}"
+  function_name    = "website_security_headers${local.name_prefix}"
   role             = aws_iam_role.lambda_edge.arn
   handler          = "secheader.lambda_handler"
   runtime          = "python3.8"
@@ -8,6 +8,12 @@ resource "aws_lambda_function" "cloudfront_lambda" {
   source_code_hash = filebase64sha256(var.lambda_zip_path)
 
   tags = var.tags
+}
+
+# Extract the first part of the domain name for the function name
+locals {
+  domain_name_parts = split(".", var.domain_name)
+  name_prefix       = element(local.domain_name_parts, 0)
 }
 
 resource "aws_iam_role" "lambda_edge" {
