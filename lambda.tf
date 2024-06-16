@@ -5,13 +5,13 @@ resource "aws_lambda_function" "cloudfront_lambda" {
   handler          = "secheaders.lambda_handler"
   runtime          = "python3.8"
   publish          = true
-  source_code_hash = filebase64sha256("secheaders.zip")
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
   tags             = var.tags
 }
 
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir  = "lambda_source_dir"
+  source_dir  = "${path.module}/lambda_source_dir"
   output_path = "secheaders.zip"
 }
 
