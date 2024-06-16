@@ -6,14 +6,13 @@ resource "aws_lambda_function" "cloudfront_lambda" {
   runtime          = "python3.8"
   publish          = true
   source_code_hash = filebase64sha256(var.lambda_zip_path)
-
-  tags = var.tags
+  tags             = var.tags
 }
 
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_dir  = var.lambda_zip_path
-  output_path = "./secheaders.zip"
+  output_path = "secheaders.zip"
 }
 
 # Extract the first part of the domain name for the function name
@@ -24,7 +23,6 @@ locals {
 
 resource "aws_iam_role" "lambda_edge" {
   name = "lambda_edge_role"
-
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -44,13 +42,11 @@ resource "aws_iam_role" "lambda_edge" {
       }
     ]
   })
-
   tags = var.tags
 }
 
 resource "aws_iam_role_policy" "lambda_edge_policy" {
   role = aws_iam_role.lambda_edge.id
-
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
