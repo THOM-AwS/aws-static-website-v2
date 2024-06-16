@@ -98,7 +98,8 @@ resource "aws_s3_bucket" "log_bucket" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "logging" {
-  bucket = aws_s3_bucket.log_bucket[0].id
+  count  = var.create_logging_bucket ? 1 : 0
+  bucket = aws_s3_bucket.log_bucket.id
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
@@ -107,6 +108,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "logging" {
 }
 
 resource "aws_s3_bucket_acl" "logging" {
-  bucket = aws_s3_bucket.log_bucket[0].id
+  count  = var.create_logging_bucket ? 1 : 0
+  bucket = aws_s3_bucket.log_bucket.id
   acl    = "private"
 }
