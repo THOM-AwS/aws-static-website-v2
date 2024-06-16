@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "cloudfront_lambda" {
   filename         = var.lambda_zip_path
-  function_name    = "website_security_headers${local.name_prefix}"
+  function_name    = "website_security_headers_${local.name_prefix}"
   role             = aws_iam_role.lambda_edge.arn
   handler          = "secheader.lambda_handler"
   runtime          = "python3.8"
@@ -63,16 +63,16 @@ resource "aws_iam_role_policy" "lambda_edge_policy" {
 
 
 resource "null_resource" "zip_lambda_sec" {
-  triggers = {
-    lambda_hash = filemd5("./secheaders.py")
-  }
   provisioner "local-exec" {
     command = <<EOT
-      apk update && apk add zip
       if command -v zip > /dev/null; then
-        zip -r secheaders.zip . -i secheaders.py
+        zip -j ${path.module}/secheaders.zip ${path.module}/secheaders.py
+      elif command -v apk > /dev/null; then
+        echo "INFO: zip command not found locally, trying to install using apk..."
+        apk update && apk add zip
+        zip -j ${path.module}/secheaders.zip ${path.module}/secheaders.py
       else
-        echo "Failed to install zip utility"
+        echo "ERROR: zip command not found and apk not available to install it."
         exit 1
       fi
     EOT
