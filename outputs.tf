@@ -10,20 +10,20 @@ output "certificate_arn" {
 
 output "function_arn" {
   description = "The ARN of the Lambda@Edge function"
-  value       = aws_lambda_function.lambda_edge.arn
+  value       = aws_lambda_function.cloudfront_lambda.arn
 }
 
 output "zone_id" {
   description = "The ID of the Route 53 hosted zone"
-  value       = aws_route53_zone.this.zone_id
+  value       = aws_route53_zone.selected.zone_id
 }
 
 output "bucket_arn" {
   description = "The ARN of the S3 bucket"
-  value       = aws_s3_bucket.this.arn
+  value       = aws_s3_bucket.thiswww.arn
 }
 
 output "bucket_name" {
   description = "The name of the S3 bucket"
-  value       = aws_s3_bucket.this.bucket
+  value       = aws_s3_bucket.thiswww.bucket
 }

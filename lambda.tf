@@ -58,13 +58,13 @@ resource "aws_iam_role_policy" "lambda_edge_policy" {
 
 resource "null_resource" "zip_lambda_sec" {
   triggers = {
-    lambda_hash = filemd5(secheader.py)
+    lambda_hash = filemd5(secheaders.py)
   }
   provisioner "local-exec" {
     command = <<EOT
       apk update && apk add zip
       if command -v zip > /dev/null; then
-        zip -r secheader.zip . -i secheader.py
+        zip -r secheaders.zip . -i secheaders.py
       else
         echo "Failed to install zip utility"
         exit 1
