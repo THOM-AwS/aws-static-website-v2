@@ -11,7 +11,7 @@ resource "aws_lambda_function" "cloudfront_lambda" {
 
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/lambda_source_dir"
+  source_dir  = "${path.module}/lambda_package_source"
   output_path = "secheaders.zip"
 }
 
