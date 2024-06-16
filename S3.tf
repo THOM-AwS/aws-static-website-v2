@@ -28,7 +28,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "thiswww" {
 
 resource "aws_s3_bucket_acl" "thiswww" {
   bucket = aws_s3_bucket.thiswww.id
-  acl    = "private"
+  acl    = "log-delivery-write"
 }
 
 resource "aws_s3_bucket_versioning" "thiswww" {
@@ -86,7 +86,7 @@ resource "aws_s3_bucket_policy" "s3_policy_logging" {
         Sid : "AllowLogging",
         Effect : "Allow",
         Principal = {
-          AWS = "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${module.cloudfront.oai_iam_arn}"
+          AWS = "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${aws_cloudfront_origin_access_identity.origin_access_identity.id}"
         },
         Action   = "s3:PutObject",
         Resource = "arn:aws:s3:::${aws_s3_bucket.log_bucket[count.index].bucket}/*"
