@@ -12,7 +12,7 @@ variable "tags" {
 variable "lambda_zip_path" {
   description = "The path to the Lambda zip file"
   type        = string
-  default     = "./secheaders.py"
+  default     = "./lambda_package_source"
 }
 
 variable "create_logging_bucket" {

@@ -2,12 +2,18 @@ resource "aws_lambda_function" "cloudfront_lambda" {
   filename         = var.lambda_zip_path
   function_name    = "website_security_headers_${local.name_prefix}"
   role             = aws_iam_role.lambda_edge.arn
-  handler          = "secheader.lambda_handler"
+  handler          = "secheaders.lambda_handler"
   runtime          = "python3.8"
   publish          = true
   source_code_hash = filebase64sha256(var.lambda_zip_path)
 
   tags = var.tags
+}
+
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_dir  = var.lambda_zip_path
+  output_path = "./secheaders.zip"
 }
 
 # Extract the first part of the domain name for the function name
@@ -59,22 +65,4 @@ resource "aws_iam_role_policy" "lambda_edge_policy" {
       }
     ]
   })
-}
-
-
-resource "null_resource" "zip_lambda_sec" {
-  provisioner "local-exec" {
-    command = <<EOT
-      if command -v zip > /dev/null; then
-        zip -j ${path.module}/secheaders.zip ${path.module}/secheaders.py
-      elif command -v apk > /dev/null; then
-        echo "INFO: zip command not found locally, trying to install using apk..."
-        apk update && apk add zip
-        zip -j ${path.module}/secheaders.zip ${path.module}/secheaders.py
-      else
-        echo "ERROR: zip command not found and apk not available to install it."
-        exit 1
-      fi
-    EOT
-  }
 }
