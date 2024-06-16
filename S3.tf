@@ -40,19 +40,19 @@
 ########################################################################
 # www bucket
 resource "aws_s3_bucket" "thiswww" {
-  bucket = lower("www.${var.domain_name}")
-  dynamic "logging" {
-    for_each = var.create_logging_bucket ? [1] : []
-    content {
-      target_bucket = aws_s3_bucket.log_bucket[0].bucket
-      target_prefix = "www/"
-    }
-  }
+  bucket        = lower("www.${var.domain_name}")
   force_destroy = true
   lifecycle {
     prevent_destroy = false
   }
   tags = var.tags
+}
+
+resource "aws_s3_bucket_logging" "thiswww" {
+  count         = var.create_logging_bucket ? 1 : 0
+  bucket        = aws_s3_bucket.thiswww.id
+  target_bucket = aws_s3_bucket.log_bucket.id
+  target_prefix = "www"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "thiswww" {
