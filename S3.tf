@@ -16,14 +16,26 @@ resource "aws_s3_bucket_policy" "thiswww" {
     Version = "2012-10-17",
     Statement = [
       {
-        Sid : "PublicReadGetObject",
-        Effect : "Allow",
-        Principal = aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn,
-        Action    = "s3:GetObject",
-        Resource  = "arn:aws:s3:::${aws_s3_bucket.thiswww.id}/*"
+        Sid    = "PublicReadGetObject",
+        Effect = "Allow",
+        Principal = {
+          AWS = "${aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn}"
+        },
+        Action   = "s3:GetObject",
+        Resource = "arn:aws:s3:::${aws_s3_bucket.thiswww.id}/*"
       }
     ]
   })
+}
+
+resource "aws_s3_bucket_website_configuration" "thiswww" {
+  bucket = aws_s3_bucket.thiswww.id
+  index_document {
+    suffix = "index.html"
+  }
+  error_document {
+    key = "index.html"
+  }
 }
 
 resource "aws_s3_bucket_logging" "thiswww" {
@@ -41,11 +53,6 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "thiswww" {
     }
   }
 }
-
-# resource "aws_s3_bucket_acl" "thiswww" {
-#   bucket = aws_s3_bucket.thiswww.id
-#   acl    = "log-delivery-write"
-# }
 
 resource "aws_s3_bucket_versioning" "thiswww" {
   bucket = aws_s3_bucket.thiswww.id
@@ -85,10 +92,13 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "logging" {
   }
 }
 
-resource "aws_s3_bucket_acl" "logging" {
+resource "aws_s3_bucket_ownership_controls" "ownership_controls_config_bucket" {
   count  = var.create_logging_bucket ? 1 : 0
-  bucket = aws_s3_bucket.log_bucket[count.index].id
-  acl    = "log-delivery-write"
+  bucket = aws_s3_bucket.log_bucket[count.index].bucket
+
+  rule {
+    object_ownership = "ObjectWriter"
+  }
 }
 
 resource "aws_s3_bucket_policy" "s3_policy_logging" {
