@@ -29,7 +29,7 @@ resource "aws_iam_user_policy" "this" {
       {
         Effect   = "Allow"
         Action   = ["cloudfront:CreateInvalidation"]
-        Resource = aws_cloudfront_distribution.this.id
+        Resource = aws_cloudfront_distribution.this.arn
       }
     ]
   })
