@@ -27,3 +27,18 @@ output "bucket_name" {
   description = "The name of the S3 bucket"
   value       = aws_s3_bucket.thiswww.bucket
 }
+
+output "user_name" {
+  description = "The name of the IAM user"
+  value       = aws_iam_user.this.name
+}
+
+output "aws_iam_access_key" {
+  description = "The access key of the IAM user"
+  value       = aws_iam_access_key.this.id
+}
+
+output "aws_iam_access_key_secret" {
+  description = "The secret access key of the IAM user. MAKE A NOTE OF THIS NOW, YOU WONT BE ABLE TO SEE IT AGAIN"
+  value       = aws_iam_access_key.this.secret
+}

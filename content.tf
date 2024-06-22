@@ -1,18 +1,28 @@
-
-resource "null_resource" "clone_html_repo" {
-  provisioner "local-exec" {
-    command = <<EOT
-      rm -rf ${path.module}/cloned_html_repo
-      git clone --branch ${var.html_source_git_branch} ${var.html_source_git_repo_url} ${path.module}/cloned_html_repo
-    EOT
-  }
+resource "aws_iam_user" "this" {
+  name = "${var.domain_name}_user"
 }
 
-resource "null_resource" "upload_html_files" {
-  depends_on = [aws_s3_bucket.thiswww, null_resource.clone_html_repo]
-  provisioner "local-exec" {
-    command = <<EOT
-      aws s3 sync ${path.module}/cloned_html_repo s3://${aws_s3_bucket.thiswww.bucket}
-    EOT
-  }
+resource "aws_iam_access_key" "this" {
+  user = aws_iam_user.this.name
+}
+
+resource "aws_iam_user_policy" "this" {
+  name = "${var.domain_name}_user_policy"
+  user = aws_iam_user.this.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["s3:putObject"]
+        Resource = "arn:aws:s3:::www.${var.domain_name}/*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["cloudfront:CreateInvalidation"]
+        Resource = aws_cloudfront_distribution.this.arn
+      }
+    ]
+  })
 }
