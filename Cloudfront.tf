@@ -30,6 +30,9 @@ resource "aws_cloudfront_distribution" "this" {
     allowed_methods = ["GET", "HEAD", "OPTIONS"]
     cached_methods  = ["GET", "HEAD", "OPTIONS"]
 
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.this.id
+    cache_policy_id          = data.aws_cloudfront_cache_policy.this.id
+
     forwarded_values {
       query_string = false
       cookies {
