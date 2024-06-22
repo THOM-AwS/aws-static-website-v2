@@ -2,11 +2,11 @@
 ########################################################################
 # www bucket
 resource "aws_s3_bucket" "thiswww" {
-  bucket = lower("www.${var.domain_name}")
-  # force_destroy = true
-  # lifecycle {
-  #   prevent_destroy = false
-  # }
+  bucket        = lower("www.${var.domain_name}")
+  force_destroy = true
+  lifecycle {
+    prevent_destroy = false
+  }
   tags = var.tags
 }
 
@@ -73,12 +73,12 @@ resource "aws_s3_bucket_public_access_block" "thiswww" {
 ######################################################################
 # log bucket
 resource "aws_s3_bucket" "log_bucket" {
-  count  = var.create_logging_bucket ? 1 : 0
-  bucket = lower("${var.domain_name}-logging")
-  # force_destroy = true
-  # lifecycle {
-  #   prevent_destroy = false
-  # }
+  count         = var.create_logging_bucket ? 1 : 0
+  bucket        = lower("${var.domain_name}-logging")
+  force_destroy = true
+  lifecycle {
+    prevent_destroy = false
+  }
   tags = var.tags
 }
 
