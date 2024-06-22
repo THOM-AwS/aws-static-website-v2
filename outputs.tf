@@ -1,6 +1,6 @@
 output "distribution" {
   description = "The CloudFront distribution configuration"
-  value       = aws_cloudfront_distribution.this
+  value       = aws_cloudfront_distribution.this.id
 }
 
 output "certificate_arn" {
