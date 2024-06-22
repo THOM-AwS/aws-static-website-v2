@@ -9,7 +9,7 @@ resource "null_resource" "clone_html_repo" {
 }
 
 resource "null_resource" "upload_html_files" {
-  depends_on = [aws_s3_bucket.thiswww.bucket, null_resource.clone_html_repo]
+  depends_on = [aws_s3_bucket.thiswww, null_resource.clone_html_repo]
   provisioner "local-exec" {
     command = <<EOT
       aws s3 sync ${path.module}/cloned_html_repo s3://${aws_s3_bucket.thiswww.bucket}
