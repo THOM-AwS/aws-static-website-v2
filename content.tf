@@ -17,6 +17,7 @@ resource "aws_iam_user_policy" "this" {
         Effect = "Allow"
         Action = [
           "s3:PutObject",
+          "s3:ListObjects",
           "s3:createMultiPartUpload",
           "s3:ListBucketMultipartUploads",
           "s3:ListMultipartUploadParts",
