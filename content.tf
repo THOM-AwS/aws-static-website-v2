@@ -17,7 +17,7 @@ resource "aws_iam_user_policy" "this" {
         Effect = "Allow"
         Action = [
           "s3:PutObject",
-          "s3:ListObjectsV2",
+          "s3:ListObjects",
           "s3:createMultiPartUpload",
           "s3:ListBucketMultipartUploads",
           "s3:ListMultipartUploadParts",
@@ -25,7 +25,7 @@ resource "aws_iam_user_policy" "this" {
           "s3:DeleteObject",
           "s3:ListBucket"
         ]
-        Resource = "arn:aws:s3:::www.${var.domain_name}/*"
+        Resource = ["arn:aws:s3:::www.${var.domain_name}/*", "arn:aws:s3:::www.${var.domain_name}"]
       },
       {
         Effect   = "Allow"
