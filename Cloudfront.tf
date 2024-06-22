@@ -33,13 +33,6 @@ resource "aws_cloudfront_distribution" "this" {
     origin_request_policy_id = data.aws_cloudfront_origin_request_policy.this.id
     cache_policy_id          = data.aws_cloudfront_cache_policy.this.id
 
-    forwarded_values {
-      query_string = false
-      cookies {
-        forward = "none"
-      }
-    }
-
     lambda_function_association {
       event_type   = "origin-response"
       lambda_arn   = aws_lambda_function.cloudfront_lambda.qualified_arn
